@@ -9,4 +9,9 @@ De cada socio vamos a guardar datos personales.
 * Apellidos
 * Fecha de nacimiento 
 * Teléfono
+* E-mail
 * Dirección:
+
+* IBAN (Opcional)
+* Fecha de alta.
+* Tutor si es menor de edad
