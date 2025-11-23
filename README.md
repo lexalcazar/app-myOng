@@ -5,13 +5,13 @@ De cada socio vamos a guardar datos personales.
 ## Modelo socio
 * Identificador
 * DNI
-* [x]Nombre
-* [x]Apellidos
-* [x]Fecha de nacimiento 
-* [x]Teléfono
-* [x]E-mail
+* [X]Nombre
+* [X]Apellidos
+* [X]Fecha de nacimiento 
+* [X]Teléfono
+* [X]E-mail
 * Dirección:
 
-* [x]IBAN (Opcional)
-* [x]Fecha de alta.
+* [X]IBAN (Opcional)
+* [X]Fecha de alta.
 * Tutor si es menor de edad
