@@ -31,8 +31,8 @@ class SocioCreateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Socio
-        exclude = ['fecha_alta']  # Campo automático
-    
+        exclude = ['fecha_registro']  # Campo automático
+
     def create(self, validated_data):
         direccion_data = validated_data.pop('direccion')
         direccion = Direccion.objects.create(**direccion_data)
