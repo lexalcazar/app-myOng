@@ -30,27 +30,32 @@ class SocioSerializer(serializers.ModelSerializer):
 class SocioCreateSerializer(serializers.ModelSerializer):
     """Serializer para escritura: permite crear socio con dirección"""
     direccion = DireccionSerializer()
-    
+
     class Meta:
         model = Socio
-        exclude = ['fecha_registro']  # Campo automático
-        
-    # validamos el dni usando el mismo metodo que el endpoint de check_dni
-    def validate_dni(self, value):
+        exclude = ['fecha_registro']
 
-        validator = DNIValidatorSerializer(data={"documento": value}) # Creamos una instancia del serializer de validación de DNI con el valor a validar
+    def validate_documento_identidad(self, value):
+        validator = DNIValidatorSerializer(data={"documento": value})
 
         if not validator.is_valid():
             raise serializers.ValidationError(
-                validator.errors["documento"][0] # Si el DNI no es válido, lanzamos una excepción con el error correspondiente
+                validator.errors["documento"][0]
             )
 
-        return value # Si el DNI es válido, devolvemos el valor sin modificar
+        return value
 
     def create(self, validated_data):
         direccion_data = validated_data.pop('direccion')
+        tutores = validated_data.pop('tutor_legal', [])
+
         direccion = Direccion.objects.create(**direccion_data)
-        return Socio.objects.create(direccion=direccion, **validated_data)
+        socio = Socio.objects.create(direccion=direccion, **validated_data)
+
+        if tutores:
+            socio.tutor_legal.set(tutores)
+
+        return socio
 
 # ---------------------------------------------------------------
 # serializer para validar el dni 

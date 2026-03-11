@@ -52,30 +52,7 @@ class SocioViewSet(viewsets.ModelViewSet):
         }
     )
 
-    @action(detail=False, methods=['post'])
-    def check_dni(self, request):
-        """
-        Valida el formato y letra de un DNI/NIE español.
-        
-        Usa el algoritmo módulo 23 para verificar la letra de control.
-        No requiere autenticación.
-        """
-        dni = request.data.get("dni")
-
-        if not dni:
-            return Response({"error": "Debe proporcionar un DNI"})
-
-        letras = "TRWAGMYFPDXBNJZSQVHLCKE"
-        numero = int(dni[:-1])
-        letra = dni[-1].upper()
-
-        letra_correcta = letras[numero % 23]
-
-        return Response({
-            "dni": dni,
-            "valido": letra == letra_correcta,
-            "letra_correcta": letra_correcta
-        })
+   
     @extend_schema(
         parameters=[
             OpenApiParameter(
