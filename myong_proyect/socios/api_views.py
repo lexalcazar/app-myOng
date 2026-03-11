@@ -2,6 +2,8 @@ from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from datetime import date
+from rest_framework import status
+from socios.dni_utils import check_dni
 
 from .models import Socio, Pago
 from .serializers import SocioSerializer, SocioCreateSerializer, PagoSerializer
@@ -101,6 +103,44 @@ class SocioViewSet(viewsets.ModelViewSet):
             "pagos": PagoSerializer(pagos, many=True).data
         })
 
+
+
+
+#-----------------------------------------------------------------
+# endpoint para validar el dni
+#-------------------------------------------------------------------
+
+
+@api_view(['POST'])
+def endpoint_check_dni(request):
+    documento = request.data.get('documento')
+    if not documento:
+        return Response(
+            {
+                "error": "No se proporcionó el campo 'documento'"
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    resultado = check_dni(documento)
+
+    # DNI incorrecto
+    if not resultado['valido']:
+        return Response(
+            resultado,
+            status=status.HTTP_400_BAD_REQUEST,
+            
+        )
+
+    # DNI correcto
+    return Response(
+        resultado,
+        status=status.HTTP_200_OK
+    
+    )
+
+
+    
 
 class PagoViewSet(viewsets.ReadOnlyModelViewSet):
     """
